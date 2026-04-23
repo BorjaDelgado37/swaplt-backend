@@ -2,6 +2,14 @@
 
 use Illuminate\Support\Str;
 
+    // TEMPORARY DEBUGGING
+    if (isset($_SERVER['RAILWAY_ENVIRONMENT'])) {
+        $envKeys = implode(', ', array_filter(array_keys($_ENV), function($k) { return str_starts_with($k, 'MYSQL') || str_starts_with($k, 'DB_'); }));
+        $dbHost = env('DB_HOST', env('MYSQLHOST', '127.0.0.1'));
+        $dbUrl = env('DB_URL', 'NOT_SET');
+        throw new \Exception("DEBUG INFO -> Host: $dbHost | Url: $dbUrl | Keys available: $envKeys");
+    }
+
 return [
 
     /*
@@ -147,7 +155,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '').'_database'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 

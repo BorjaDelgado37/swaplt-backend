@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: swaplt_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-123456789}'
+      MYSQL_DATABASE: '${DB_DATABASE:-swaplt_db}'
+#      MYSQL_USER: '${DB_USERNAME:-root}'
+#      MYSQL_PASSWORD: '${DB_PASSWORD:-123456789}'
+    ports:
+      - '${DB_PORT:-3306}:3306'
+    volumes:
+      - swaplt_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD:-123456789}"]
+      retries: 3
+      timeout: 5s
+
+volumes:
+  swaplt_mysql_data:

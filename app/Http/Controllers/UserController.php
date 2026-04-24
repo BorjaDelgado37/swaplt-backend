@@ -20,12 +20,9 @@ class UserController extends Controller
     // Mostrar un usuario específico
     public function show($id)
     {
-        $cacheKey = "user_{$id}";
-        $user = cache()->remember($cacheKey, now()->addMinutes(30), function () use ($id) {
-            return User::select('id', 'name', 'email', 'rol', 'created_at', 'updated_at')
-                ->findOrFail($id);
-        });
-        
+        $user = User::select('id', 'name', 'email', 'rol', 'created_at', 'updated_at')
+            ->findOrFail($id);
+            
         return response()->json($user);
     }
 

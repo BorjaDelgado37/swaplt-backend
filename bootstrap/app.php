@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(\App\Http\Middleware\CorsMiddleware::class); // <-- Esta línea
+        $middleware->prepend(\App\Http\Middleware\CorsMiddleware::class); // CORS primero para evitar ERR_FAILED
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

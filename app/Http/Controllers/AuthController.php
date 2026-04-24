@@ -33,13 +33,22 @@ class AuthController extends Controller
             'verification_code' => $verificationCode,
         ]);
 
-        // Enviar correo de verificación
-        $this->sendVerificationEmail($user);
+        try {
+            // Enviar correo de verificación
+            $this->sendVerificationEmail($user);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error al enviar correo de registro: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Usuario registrado con éxito, pero hubo un problema al enviar el correo de verificación.',
+                'error_mail' => $e->getMessage(),
+                'user' => $user
+            ], 201);
+        }
 
         return response()->json([
             'message' => 'Usuario registrado con éxito. Verifica tu correo.',
             'user' => $user
-        ]);
+        ], 201);
     }
 
     // Enviar correo de verificación
@@ -423,8 +432,17 @@ class AuthController extends Controller
         // Guardamos el usuario actualizado
         $user->save();
 
-        // Enviar un nuevo correo de verificación al usuario
-        $this->sendVerificationEmail($user);
+        try {
+            // Enviar un nuevo correo de verificación al usuario
+            $this->sendVerificationEmail($user);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error al enviar correo en actualización de perfil: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Perfil actualizado con éxito, pero hubo un problema al enviar el correo de verificación.',
+                'error_mail' => $e->getMessage(),
+                'user' => $user,
+            ], 200);
+        }
 
         return response()->json([
             'message' => 'Perfil actualizado con éxito. Verifica tu correo.',

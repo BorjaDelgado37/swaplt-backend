@@ -151,7 +151,8 @@ class AuthController extends Controller
         $user->save();
 
         // Redirigir al frontend
-        return redirect('http://localhost:4200/profile');
+        $frontendUrl = env('FRONTEND_URL', 'http://localhost:4200');
+        return redirect("{$frontendUrl}/profile");
     }
 
     // Iniciar sesión
@@ -365,11 +366,13 @@ class AuthController extends Controller
             ->where('reset_token_expires_at', '>', now())
             ->first();
 
+        $frontendUrl = env('FRONTEND_URL', 'http://localhost:4200');
+
         if (!$user) {
-            return redirect('http://localhost:4200/reset-password?error=invalid_token');
+            return redirect("{$frontendUrl}/reset-password?error=invalid_token");
         }
 
-        return redirect("http://localhost:4200/reset-password?token={$token}");
+        return redirect("{$frontendUrl}/reset-password?token={$token}");
     }
 
     public function resetPassword(Request $request, $token)

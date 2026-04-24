@@ -39,14 +39,22 @@ class CorsMiddleware
         // Continuar con la solicitud y agregar headers CORS
         $response = $next($request);
 
-        // Agregamos los headers a la respuesta
+        $headers = [
+            'Access-Control-Allow-Origin' => $allowOrigin,
+            'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
+            'Access-Control-Allow-Credentials' => 'true',
+        ];
+
+        // Agregamos los headers a la respuesta de forma robusta
         if (method_exists($response, 'withHeaders')) {
-            $response->withHeaders([
-                'Access-Control-Allow-Origin' => $allowOrigin,
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, Authorization, X-Requested-With',
-                'Access-Control-Allow-Credentials' => 'true',
-            ]);
+            return $response->withHeaders($headers);
+        }
+
+        if (isset($response->headers)) {
+            foreach ($headers as $key => $value) {
+                $response->headers->set($key, $value);
+            }
         }
 
         return $response;

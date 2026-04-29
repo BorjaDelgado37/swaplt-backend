@@ -51,6 +51,7 @@ Route::middleware('auth:api')->get('user/vehiculos', [VehiculoController::class,
 
 //-------------------------------------   CATEGORIAS   -------------------------------------------//
 Route::get('categorias', [CategoriaController::class, 'index']);
+Route::get('categorias/stats', [CategoriaController::class, 'stats']);
 Route::get('categorias/{id}', [CategoriaController::class, 'show']);
 Route::post('categorias', [CategoriaController::class, 'store']);
 Route::put('categorias/{id}', [CategoriaController::class, 'update']);

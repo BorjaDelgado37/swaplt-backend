@@ -14,6 +14,19 @@ class CategoriaController extends Controller
         return response()->json($categorias);
     }
 
+    // Estadísticas: vehículos por categoría
+    public function stats()
+    {
+        $stats = Categoria::withCount('vehiculos')->get()->map(function ($cat) {
+            return [
+                'id' => $cat->id,
+                'nombre' => $cat->nombre,
+                'total_vehiculos' => $cat->vehiculos_count,
+            ];
+        });
+        return response()->json($stats);
+    }
+
     // Crear una nueva categoría (solo admin puede hacerlo)
     public function store(Request $request)
     {

@@ -38,7 +38,7 @@
 
 ## 1. Introducción General
 
-SWAPLT es una plataforma de intercambio y venta de vehículos desarrollada con Laravel 12.0 y PHP 8.2. La API RESTful proporciona endpoints para gestionar usuarios, vehículos, mensajería, favoritos y más.
+SWAPLT es una plataforma de intercambio y venta de vehículos desarrollada con Laravel 12.0 y PHP 8.2. La API RESTful está desplegada en producción a través de contenedores en **Railway**, proporcionando endpoints para gestionar usuarios, vehículos, mensajería, favoritos y más.
 
 ### Tecnologías Principales
 - **Backend**: Laravel 12.0
@@ -50,6 +50,7 @@ SWAPLT es una plataforma de intercambio y venta de vehículos desarrollada con L
   - `tymon/jwt-auth`: Para autenticación JWT
   - `laravel/socialite`: Para autenticación con Google
   - `barryvdh/laravel-dompdf`: Para generación de PDFs
+  - `resend/resend-php`: Para envío de emails transaccionales evitando bloqueos de SMTP.
 
 ## 2. Estructura General de la API
 
@@ -271,11 +272,12 @@ curl -X GET http://localhost:8000/api/me \
 
 1. Todas las contraseñas se almacenan hasheadas
 2. Los tokens JWT tienen tiempo de expiración
-3. Implementación de middleware de autenticación
-4. Validación de datos en todos los endpoints
-5. Protección contra CSRF
-6. Sanitización de inputs
-7. Control de acceso basado en roles
+3. Implementación de middleware de autenticación (`AuthMiddleware`)
+4. Middleware de CORS (`CorsMiddleware`) configurado específicamente para permitir peticiones desde el dominio de Vercel (solucionando bloqueos de CORS en producción).
+5. Validación de datos en todos los endpoints
+6. Protección contra CSRF
+7. Sanitización de inputs
+8. Control de acceso basado en roles
 
 ## 8. Variables de Entorno
 
@@ -298,13 +300,10 @@ DB_PASSWORD=
 JWT_SECRET=your-jwt-secret
 JWT_TTL=60
 
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS=null
+# Configuración de Correo en Producción (Resend)
+MAIL_MAILER=resend
+RESEND_API_KEY=tu_api_key_de_resend
+MAIL_FROM_ADDRESS="no-reply@swaplt-cars.es"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
@@ -406,7 +405,7 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 13. Autoría
 
-Desarrollado por el equipo de SWAPLT.
+Desarrollado por Borja Delgado (2ºDAW) IES ALBARREGAS.
 
 ---
 

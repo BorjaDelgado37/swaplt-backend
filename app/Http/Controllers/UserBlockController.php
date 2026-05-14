@@ -25,7 +25,8 @@ class UserBlockController extends Controller
                     'id' => $bloqueo->blocker->id,
                     'nombre' => $bloqueo->blocker->name
                 ],
-                'razon' => $bloqueo->razon
+                'razon' => $bloqueo->razon,
+                'created_at' => $bloqueo->created_at
             ];
         });
 

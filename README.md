@@ -302,7 +302,7 @@ JWT_TTL=60
 
 # Configuración de Correo en Producción (Resend)
 MAIL_MAILER=resend
-RESEND_API_KEY=tu_api_key_de_resend
+RESEND_API_KEY=******
 MAIL_FROM_ADDRESS="no-reply@swaplt-cars.es"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
@@ -312,7 +312,7 @@ MAIL_FROM_NAME="${APP_NAME}"
 ### 9.1 Instalación
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/swaplt.git
+git clone https://github.com/BorjaDelgado37/swaplt.git
 
 # Instalar dependencias
 composer install
